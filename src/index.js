@@ -4,7 +4,7 @@ class App {
     constructor() {
         this.urlPersonagens = `http://localhost:3333/characters`
         this.dados = [];
-        this.registrosPorPagina = 50;
+        this.registrosPorPagina = 10;
 
         this.buscarDados(1);
     }
@@ -12,18 +12,31 @@ class App {
 
     buscarDados(pagina) {
 
-        /*axios.get(this.urlPersonagens)
+        axios.get(this.urlPersonagens + `?pagina=${pagina}&registros=${this.registrosPorPagina}`)
             .then(response => {
-                console.log(response);
-                this.mostrarDados(response.data.results);
-                this.setPagination(response.data.total);
-            });*/
-        axios.get(this.urlPersonagens + `?pagina=${pagina}`)
-            .then(response => {
-                console.log(response.data);
-                this.mostrarDados(response.data.data.results);
+
+                this.mostrarCards(response.data.data.results);
                 this.setPagination(response.data.data.total);
             });
+
+
+
+    }
+
+    buscarPersonagem(event) {
+        console.log(event.path);
+        const id = +event.path[1].dataset.id;
+        console.log(id);
+
+        axios.get(this.urlPersonagens + `/${id}`)
+            .then(response => {
+                document.getElementById("cards").style.display = "none";
+                document.getElementById("pagination").style.display = "none";
+                document.getElementById("detalhes").style.display = "block";
+
+            });
+
+
 
     }
 
@@ -53,31 +66,31 @@ class App {
         this.buscarDados(pagina);
     }
 
-    mostrarDados(dados) {
+    mostrarCards(dados) {
 
         let html = "";
         dados.forEach(personagem => {
             html += `
-                    <div class="card" style="width: 18rem;">
-                        <img src="${personagem.thumbnail.path}.${personagem.thumbnail.extension}"  class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">${personagem.name}</h5>
-                            <p class="card-text">${personagem.description}</p>
-                            <a href="/characters/${personagem.id}" class="btn btn-primary">Saiba mais</a>
+                    <div class="card">
+                        <a href="#" class="btn btn-dark page-id" data-id="${personagem.id}">
+                            <img src="${personagem.thumbnail.path}.${personagem.thumbnail.extension}"  class="card-img-top image" alt="...">
+                        </a>
+                        
+                        <div class="middle">
+                            <div class="text">
+                                ${personagem.name}
+                            </div>
                         </div>
                     </div>
                     `;
-            /*<tr>
-                <td>${personagem.id}</td>
-                <td>${personagem.name}</td>
-                <td>${personagem.description}</td>
-                <td><img src="${personagem.thumbnail.path}.${personagem.thumbnail.extension}" width="100"></td>
-            </tr>
-            `;*/
         });
 
         document.getElementById("cards").innerHTML = html;
-        //document.querySelector(".table tbody").innerHTML = html;
+
+        document.querySelectorAll('.page-id').forEach((el) => {
+            el.onclick = (event) => this.buscarPersonagem(event);
+        });
+
     }
 }
 
