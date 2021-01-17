@@ -30,6 +30,8 @@ class App {
     setPagination(totalItens) {
         const paginas = Math.ceil(totalItens / this.registrosPorPagina);
 
+        document.querySelector('.pagination').innerHTML = "";
+
         for (let i = 1; i <= paginas; i++) {
             const li = `
                         <li class="page-item">
