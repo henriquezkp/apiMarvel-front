@@ -18,7 +18,7 @@ class App {
                 this.mostrarDados(response.data.results);
                 this.setPagination(response.data.total);
             });*/
-        axios.get(this.urlPersonagens)
+        axios.get(this.urlPersonagens + `?pagina=${pagina}`)
             .then(response => {
                 console.log(response.data);
                 this.mostrarDados(response.data.data.results);
