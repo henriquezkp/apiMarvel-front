@@ -6,7 +6,25 @@
 }
 
 #detalhes {
-    display: none;
+    display: block;
+    margin-left: 150px;
+    margin-right: 150px;
+}
+
+#imgVertical {
+    width: 300px;
+    transition-property: width;
+    transition-duration: 00.14s;
+    transition-timing-function: linear;
+    transition-delay: .05s;
+}
+
+#imgVertical:hover {
+    width: 900px;
+}
+
+#detalhesVertical {
+    background: rgb(88, 88, 88);
 }
 
 ul {

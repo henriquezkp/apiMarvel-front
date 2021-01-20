@@ -24,16 +24,34 @@ class App {
     }
 
     buscarPersonagem(event) {
-        console.log(event.path);
+
         const id = +event.path[1].dataset.id;
         console.log(id);
 
         axios.get(this.urlPersonagens + `/${id}`)
             .then(response => {
+                console.log("retorno", response);
+                let personagem = response.data.data.results[0];
+                console.log("personagem", personagem);
+
                 document.getElementById("cards").style.display = "none";
                 document.getElementById("pagination").style.display = "none";
                 document.getElementById("detalhes").style.display = "block";
-
+                let html = "";
+                html += `
+                <div class="row">
+                    <img id="imgVertical" class="col-4" 
+                        src="${personagem.thumbnail.path}.${personagem.thumbnail.extension}" alt="...">
+                    
+                    <div id="detalhesVertical" class="col-sm">
+                    <h3>Nome: ${personagem.name}</h3>
+                    <h5>Descrição: ${personagem.description}</h5>
+                    
+                    
+                    </div>
+                </div>
+                `;
+                document.getElementById("detalhes").innerHTML += html;
             });
 
 
