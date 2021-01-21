@@ -2,9 +2,9 @@ import axios from 'axios';
 
 class App {
     constructor() {
-        this.urlPersonagens = `http://localhost:3333/characters`
+        this.urlPersonagens = `http://localhost:3001/personagens`
         this.dados = [];
-        this.registrosPorPagina = 10;
+        this.registrosPorPagina = 100;
 
         this.buscarDados(1);
     }
@@ -23,6 +23,14 @@ class App {
 
     }
 
+    buscarPorFiltro(event) {
+        axios.get(this.url + `&namestartsWith=${this.searchTxt.value}`)
+            .then(response => {
+                this.showData(response.data.results);
+                this.setPagination(response.data.total);
+            })
+    }
+
     buscarPersonagem(event) {
 
         const id = +event.path[1].dataset.id;
@@ -39,11 +47,11 @@ class App {
                 document.getElementById("detalhes").style.display = "block";
                 let html = "";
                 html += `
-                <div class="row">
-                    <img id="imgVertical" class="col-4" 
+                <div class="row no-gutters">
+                    <img id="imgVertical" class="col-md-4" 
                         src="${personagem.thumbnail.path}.${personagem.thumbnail.extension}" alt="...">
                     
-                    <div id="detalhesVertical" class="col-sm">
+                    <div id="detalhesVertical" class="col-md-8">
                     <h3>Nome: ${personagem.name}</h3>
                     <h5>Descrição: ${personagem.description}</h5>
                     
